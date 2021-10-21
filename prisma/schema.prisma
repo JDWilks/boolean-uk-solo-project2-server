@@ -18,4 +18,34 @@ model User {
  email      String      @unique
  password   String      @unique
  role       String
+ trades     Trade[] 
+ wallet Wallet[]
 }
+
+model Trade {
+id                    Int @id @default(autoincrement())
+userId                Int  
+user                  User @relation(fields: [userId], references: [id])
+nftId                 String 
+nft                   NftArt @relation(fields: [nftId], references: [id])
+purchasePrice         Float
+date                  DateTime
+}
+
+model NftArt {
+id                   String @id @default(uuid())
+name                 String
+price                Float
+description          String
+url                  String
+ trades              Trade[] 
+}
+
+model Wallet{
+ id                    Int @id @default(autoincrement())
+ coin String
+ userId Int
+ amount Float
+ user                  User @relation(fields: [userId], references: [id])
+}
+

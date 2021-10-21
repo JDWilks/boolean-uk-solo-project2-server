@@ -19,5 +19,8 @@
   "devDependencies": {
     "nodemon": "^2.0.14",
     "prisma": "^3.3.0"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }
