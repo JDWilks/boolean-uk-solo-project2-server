@@ -29,7 +29,7 @@ user                  User @relation(fields: [userId], references: [id])
 nftId                 String 
 nft                   NftArt @relation(fields: [nftId], references: [id])
 purchasePrice         Float
-date                  DateTime
+date                  DateTime @default(now())
 }
 
 model NftArt {

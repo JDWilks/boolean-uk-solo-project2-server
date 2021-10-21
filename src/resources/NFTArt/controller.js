@@ -32,7 +32,7 @@ function findAllNftArt(req, res) {
 // get request to find one nft
 
 function findOneNft(req, res) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   prisma.nftArt
     .findUnique({
       where: {
@@ -43,7 +43,7 @@ function findOneNft(req, res) {
       res.json(art);
     })
     .catch((error) => {
-      res.json({ msg: "...your get one backend blew up" });
+      res.json(error);
     });
 }
 
@@ -51,7 +51,7 @@ function findOneNft(req, res) {
 
 function updateNftArt(req, res) {
   const updatedNft = req.body;
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   console.log(updatedNft);
   prisma.nftArt
     .update({
@@ -72,7 +72,7 @@ function updateNftArt(req, res) {
 // delete request to delete nft card
 
 function deleteNftArt(req, res) {
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   prisma.nftArt
     .delete({
       where: { id: id },
