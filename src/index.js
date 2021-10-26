@@ -10,6 +10,7 @@ const userRouter = require("./resources/User/router");
 const nftArtRouter = require("./resources/NFTArt/router");
 const tradeRouter = require("./resources/Trade/router");
 const walletRouter = require("./resources/Wallet/router");
+const authRouter = require("./resources/Auth/router");
 
 /* SETUP MIDDLEWARE */
 
@@ -32,6 +33,8 @@ app.use("/nftArt", nftArtRouter);
 app.use("/trade", tradeRouter);
 // any fetch from /wallet is directed to use the walletRouter
 app.use("/wallet", walletRouter);
+// this is the special auth route for checking passwords
+app.use(authRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });

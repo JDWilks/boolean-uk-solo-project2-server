@@ -22,6 +22,8 @@ model User {
  wallet Wallet[]
 }
 
+// note don't use unique on passwords due to security
+
 model Trade {
 id                    Int @id @default(autoincrement())
 userId                Int  
