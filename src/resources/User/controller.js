@@ -1,19 +1,37 @@
+const { wallet } = require("../../../utils/database");
 const prisma = require("../../../utils/database");
+const { createWithHash } = require("./service");
 
 // backend receives request from front end
-// post request to add a user
+// post request to add a user which also creates a wallet for them with 1000 etherium
 
-function addUser(req, res) {
-  const newUser = req.body;
-  console.log("newUser", newUser);
-  prisma.user
-    .create({ data: newUser })
-    .then((newUser) => {
-      res.json(newUser);
-    })
-    .catch((error) => {
-      res.json({ msg: error.message });
+async function addUser(req, res) {
+  try {
+    const newUser = req.body;
+    // this is my modifiyed create verstion coming from service with password hashing
+    const createdUser = await createWithHash(newUser);
+    const createdWallet = await prisma.wallet.create({
+      data: {
+        coin: "Etherium",
+        amount: 1000,
+        userId: createdUser.id,
+      },
     });
+
+    res.json({
+      ...createdUser,
+      wallet: createdWallet,
+    });
+  } catch (error) {
+    res.json(error);
+  }
 }
 
-module.exports = { addUser };
+const findAllUsers = async (req, res) => {
+  const allUsers = await prisma.user.findMany({
+    include: { wallet: true },
+  });
+  res.json({ data: allUsers });
+};
+
+module.exports = { addUser, findAllUsers };

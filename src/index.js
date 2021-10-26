@@ -9,6 +9,7 @@ const app = express();
 const userRouter = require("./resources/User/router");
 const nftArtRouter = require("./resources/NFTArt/router");
 const tradeRouter = require("./resources/Trade/router");
+const walletRouter = require("./resources/Wallet/router");
 
 /* SETUP MIDDLEWARE */
 
@@ -29,6 +30,8 @@ app.use("/user", userRouter);
 app.use("/nftArt", nftArtRouter);
 // any fetch from /trade is directed to use the tradeRouter
 app.use("/trade", tradeRouter);
+// any fetch from /wallet is directed to use the walletRouter
+app.use("/wallet", walletRouter);
 
 app.get("*", (req, res) => {
   res.json({ ok: true });
