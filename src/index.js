@@ -1,4 +1,6 @@
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 const express = require("express");
 const cors = require("cors");
@@ -16,12 +18,30 @@ const authRouter = require("./resources/Auth/router");
 
 app.disable("x-powered-by");
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 /* SETUP ROUTES */
+
+const authMiddleWare = (req, res, next) => {
+  if (!req.cookies.token) {
+    res.json({ message: "invalid cookie dip shit" });
+    return;
+  }
+  console.log("req.cookies.token...", req.cookies.token);
+  const userData = jwt.verify(req.cookies.token, "somethingblah");
+  console.log("userData", userData);
+
+  if (userData) {
+    console.log("inside if statement");
+    req.currentUser = userData;
+    return next();
+  }
+  res.json({ message: "invalid cookie dip shit" });
+};
 
 // here the requests come in from the front end and choose which router to look for instructions
 
@@ -30,7 +50,7 @@ app.use("/user", userRouter);
 // any fetch from /nftArt is directed to use the nftArtRouter
 app.use("/nftArt", nftArtRouter);
 // any fetch from /trade is directed to use the tradeRouter
-app.use("/trade", tradeRouter);
+app.use("/trade", authMiddleWare, tradeRouter);
 // any fetch from /wallet is directed to use the walletRouter
 app.use("/wallet", walletRouter);
 // this is the special auth route for checking passwords

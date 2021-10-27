@@ -7,7 +7,7 @@ const findUserWithValidation = async (userData) => {
   });
 
   if (!foundUser) throw new Error("Username/Password is incorrect");
-
+  // below: here bcrypt compares userData.password (from body) with foundUser.password with is the incrypted version in the database
   const isPasswordValid = await bcrypt.compare(
     userData.password,
     foundUser.password
