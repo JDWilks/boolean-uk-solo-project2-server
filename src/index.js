@@ -26,6 +26,9 @@ app.use(morgan("dev"));
 
 /* SETUP ROUTES */
 
+// middleware to check if you have a cookie - if you don't you can't access trade route
+// this actually needs to check for a specific cookie to only allow admin to access trade (and admin page)
+
 const authMiddleWare = (req, res, next) => {
   if (!req.cookies.token) {
     res.json({ message: "invalid cookie dip shit" });

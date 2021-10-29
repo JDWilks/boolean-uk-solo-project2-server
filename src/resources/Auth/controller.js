@@ -8,7 +8,7 @@ const loginUser = async (req, res) => {
   try {
     // check if credentials are valid
     const loggedUser = await findUserWithValidation(userCreds);
-    // creating jwt token
+    // creating jwt token with id and firstname and uses secret word for ??????
     const token = jwt.sign(
       { id: loggedUser.id, firstName: loggedUser.firstName },
       "somethingblah"
@@ -23,4 +23,9 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser };
+const logoutUser = (req, res) => {
+  res.cookie("token", "", { maxAge: 1 });
+  res.redirect("/");
+};
+
+module.exports = { loginUser, logoutUser };
