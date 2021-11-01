@@ -1,6 +1,6 @@
 const { Router } = require("express");
 
-const { loginUser, logoutUser } = require("./controller");
+const { loginUser, logoutUser, validateCookie } = require("./controller");
 
 const router = Router();
 
@@ -8,6 +8,12 @@ const router = Router();
 
 router.route("/login").post(loginUser);
 
+// logout route
+
 router.route("/logout").get(logoutUser);
+
+// validate cookie route
+
+router.route("/cookie").get(validateCookie);
 
 module.exports = router;

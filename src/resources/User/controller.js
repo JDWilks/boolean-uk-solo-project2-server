@@ -19,7 +19,10 @@ async function addUser(req, res) {
     });
 
     res.json({
-      ...createdUser,
+      id: createdUser.id,
+      firstName: createdUser.firstName,
+      email: createdUser.email,
+      role: createdUser.role,
       wallet: createdWallet,
     });
   } catch (error) {
