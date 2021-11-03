@@ -17,7 +17,7 @@ async function addUser(req, res) {
         userId: createdUser.id,
       },
     });
-
+    console.log("wallet", createdWallet);
     res.json({
       id: createdUser.id,
       firstName: createdUser.firstName,
@@ -26,6 +26,8 @@ async function addUser(req, res) {
       wallet: createdWallet,
     });
   } catch (error) {
+    console.log("error", error);
+
     res.json(error);
   }
 }

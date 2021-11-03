@@ -18,7 +18,7 @@ const authRouter = require("./resources/Auth/router");
 
 app.disable("x-powered-by");
 
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: process.env.FRONTENDURL, credentials: true }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,8 +30,9 @@ app.use(morgan("dev"));
 // this actually needs to check for a specific cookie to only allow admin to access trade (and admin page)
 
 const authMiddleWare = (req, res, next) => {
+  console.log("cookies req", req.cookies);
   if (!req.cookies.token) {
-    res.json({ message: "invalid cookie dip shit" });
+    res.json({ message: "no token in cookie" });
     return;
   }
   console.log("req.cookies.token...", req.cookies.token);
@@ -43,7 +44,7 @@ const authMiddleWare = (req, res, next) => {
     req.currentUser = userData;
     return next();
   }
-  res.json({ message: "invalid cookie dip shit" });
+  res.json({ message: "if user not autherised" });
 };
 
 // here the requests come in from the front end and choose which router to look for instructions

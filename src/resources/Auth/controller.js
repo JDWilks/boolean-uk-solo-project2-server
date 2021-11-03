@@ -10,7 +10,8 @@ const loginUser = async (req, res) => {
   try {
     // check if credentials are valid
     const loggedUser = await findUserWithValidation(userCreds);
-    // creating jwt token with id and firstname and uses secret word for ??????
+    console.log("loggedUser", loggedUser);
+    // creating jwt token with id and firstname and uses secret key
     const token = jwt.sign(
       { id: loggedUser.id, firstName: loggedUser.firstName },
       "somethingblah"
@@ -18,13 +19,14 @@ const loginUser = async (req, res) => {
     // setting cookie
     res.cookie("token", token, { httpOnly: true });
 
-    // handling result and only giving back the id and userName
+    // handling result and only giving back info needed (need wallet)
     res.json({
       user: {
         id: loggedUser.id,
         firstName: loggedUser.firstName,
         email: loggedUser.email,
         role: loggedUser.role,
+        wallet: loggedUser.wallet,
       },
     });
     // so above - although findUserWithValidation checks the email and password here i can pass back whatever i want to the front end ?

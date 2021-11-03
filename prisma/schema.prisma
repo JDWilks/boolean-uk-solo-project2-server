@@ -19,7 +19,7 @@ model User {
  password   String      @unique
  role       String
  trades     Trade[] 
- wallet Wallet[]
+ wallet Wallet?
 }
 
 // note don't use unique on passwords due to security
