@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
       "somethingblah"
     );
     // setting cookie
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token);
 
     // handling result and only giving back info needed (need wallet)
     res.json({
@@ -29,7 +29,6 @@ const loginUser = async (req, res) => {
         wallet: loggedUser.wallet,
       },
     });
-    // so above - although findUserWithValidation checks the email and password here i can pass back whatever i want to the front end ?
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
