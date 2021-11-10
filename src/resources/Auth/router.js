@@ -14,6 +14,6 @@ router.route("/logout").get(logoutUser);
 
 // validate cookie route
 
-router.route("/cookie").get(validateCookie);
+router.route("/verify").get(validateCookie);
 
 module.exports = router;

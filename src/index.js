@@ -26,25 +26,44 @@ app.use(morgan("dev"));
 
 /* SETUP ROUTES */
 
-// middleware to check if you have a cookie - if you don't you can't access trade route
-// this actually needs to check for a specific cookie to only allow admin to access trade (and admin page)
+// middleware to check if you have a token - if you don't you can't access trade route
 
 const authMiddleWare = (req, res, next) => {
-  console.log("cookies req", req.cookies);
-  if (!req.cookies.token) {
-    res.json({ message: "no token in cookie" });
+  const bearerHeader = req.headers["authorization"];
+  if (typeof bearerHeader === "undefined") {
+    res.status(403).json({
+      error: "No authorization Header Provided",
+    });
     return;
   }
-  console.log("req.cookies.token...", req.cookies.token);
-  const userData = jwt.verify(req.cookies.token, "somethingblah");
-  console.log("userData", userData);
+  const bearer = bearerHeader.split(" ");
+  const token = bearer[1];
+  jwt.verify(token, "somethingblah", (error, decoded) => {
+    if (decoded) {
+      next();
+    }
+    if (error) {
+      res.status(403).json({
+        error: "No authorization Header Provided",
+      });
+    }
+  });
 
-  if (userData) {
-    console.log("inside if statement");
-    req.currentUser = userData;
-    return next();
-  }
-  res.json({ message: "if user not autherised" });
+  // console.log("cookies req", req.cookies);
+  // if (!req.cookies.token) {
+  //   res.json({ message: "no token in cookie" });
+  //   return;
+  // }
+  // console.log("req.cookies.token...", req.cookies.token);
+  // const userData = jwt.verify(req.cookies.token, "somethingblah");
+  // console.log("userData", userData);
+
+  // if (userData) {
+  //   console.log("inside if statement");
+  //   req.currentUser = userData;
+  //   return next();
+  // }
+  // res.json({ message: "if user not autherised" });
 };
 
 // here the requests come in from the front end and choose which router to look for instructions
