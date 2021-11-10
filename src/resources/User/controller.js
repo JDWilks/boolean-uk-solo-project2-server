@@ -1,6 +1,7 @@
 const { wallet } = require("../../../utils/database");
 const prisma = require("../../../utils/database");
 const { createWithHash } = require("./service");
+const jwt = require("jsonwebtoken");
 
 // backend receives request from front end
 // post request to add a user which also creates a wallet for them with 1000 etherium
@@ -18,13 +19,23 @@ async function addUser(req, res) {
       },
     });
     console.log("wallet", createdWallet);
-    res.json({
-      id: createdUser.id,
-      firstName: createdUser.firstName,
-      email: createdUser.email,
-      role: createdUser.role,
-      wallet: createdWallet,
-    });
+
+    jwt.sign(
+      { id: createdUser.id, firstName: createdUser.firstName },
+      "somethingblah",
+      (error, token) => {
+        res.json({
+          user: {
+            id: createdUser.id,
+            firstName: createdUser.firstName,
+            email: createdUser.email,
+            role: createdUser.role,
+            wallet: createdUser.wallet,
+          },
+          token,
+        });
+      }
+    );
   } catch (error) {
     console.log("error", error);
 
